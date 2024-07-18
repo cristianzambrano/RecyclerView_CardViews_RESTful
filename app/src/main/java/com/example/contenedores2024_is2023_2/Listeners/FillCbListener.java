@@ -1,6 +1,7 @@
 package com.example.contenedores2024_is2023_2.Listeners;
 
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Spinner;
 
 import com.example.contenedores2024_is2023_2.Modelos.ItemCB;
@@ -16,10 +17,10 @@ import WebServices.Asynchtask;
 
 public class FillCbListener implements Asynchtask {
 
-    Spinner cb;
+    AutoCompleteTextView cb;
     String campoID, campoDesc;
     Boolean addAllItem;
-    public FillCbListener(Spinner cb, String campoID, String campoDesc, Boolean addAllItem) {
+    public FillCbListener(AutoCompleteTextView cb, String campoID, String campoDesc, Boolean addAllItem) {
         this.cb = cb;
         this.campoID = campoID;
         this.campoDesc = campoDesc;
@@ -39,11 +40,7 @@ public class FillCbListener implements Asynchtask {
 
         ArrayAdapter<ItemCB> adaptador =
                 new ArrayAdapter<ItemCB>(cb.getContext(),
-                        android.R.layout.simple_spinner_item, datos);
-
-
-        adaptador.setDropDownViewResource(
-                android.R.layout.simple_spinner_dropdown_item);
+                        android.R.layout.simple_dropdown_item_1line, datos);
         cb.setAdapter(adaptador);
     }
 }

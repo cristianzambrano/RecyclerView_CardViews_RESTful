@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -32,7 +33,7 @@ public class MainActivity
         extends AppCompatActivity
         implements Asynchtask, AdapterView.OnItemSelectedListener{
 
-    Spinner cbCategoria, cbSUbCategoria;
+    AutoCompleteTextView cbCategoria, cbSUbCategoria;
     RecyclerView rvListaLugares;
     Map<String, String> datosWS = new HashMap<String, String>();
     @Override
@@ -40,15 +41,15 @@ public class MainActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        cbCategoria = findViewById(R.id.cbCategoria);
-        cbSUbCategoria = findViewById(R.id.cbSubCategoria);
+        cbCategoria = findViewById(R.id.actvCat);
+        cbSUbCategoria = findViewById(R.id.actvCat);
         rvListaLugares = findViewById(R.id.rvLista);
         cbCategoria.setOnItemSelectedListener(this);
         cbSUbCategoria.setOnItemSelectedListener(this);
 
 
         WebService ws= new WebService(
-                "https://uealecpeterson.net/turismo/categoria/getlistadoCB",
+                "https://turismoquevedo.com/categoria/getlistadoCB",
                 datosWS, MainActivity.this,
                 new FillCbListener(cbCategoria, "id", "descripcion", true) );
         ws.execute("GET");
@@ -65,25 +66,25 @@ public class MainActivity
 
         int IDCat=0, IDSubCat=0;
         int IDItemSeleccionado = ((ItemCB)parent.getItemAtPosition(position)).getID();
-        if(parent == cbCategoria) {
+        if(view.getId() == R.id.actvCat) {
             if (IDItemSeleccionado>0){
                 IDCat = IDItemSeleccionado;
                 WebService ws2= new WebService(
-                        "https://uealecpeterson.net/turismo/subcategoria/getlistadoCB/" + IDCat,
+                        "https://turismoquevedo.com/subcategoria/getlistadoCB/" + IDCat,
                         datosWS, MainActivity.this,
                         new FillCbListener(cbSUbCategoria, "id", "descripcion", true) );
                 ws2.execute("GET");
             }
 
-        }else if (parent == cbSUbCategoria){
-            if (cbCategoria.getSelectedItemPosition()!=AdapterView.INVALID_POSITION){
-                IDCat = ((ItemCB)cbCategoria.getSelectedItem()).getID();
+        }else if (view.getId() == R.id.actvSubCat){
+            if (parent.getSelectedItemPosition()!=AdapterView.INVALID_POSITION){
+                IDCat = ((ItemCB)parent.getSelectedItem()).getID();
                 IDSubCat = IDItemSeleccionado;
             }
         }
 
         WebService ws3 = new WebService(
-                "https://uealecpeterson.net/turismo/lugar_turistico/json_getlistadoGridLT/" +
+                "https://turismoquevedo.com/lugar_turistico/json_getlistadoGridLT/" +
                         IDCat + "/" + IDSubCat,
                 datosWS, MainActivity.this, MainActivity.this);
         ws3.execute("GET");
